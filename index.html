@@ -83,9 +83,11 @@
                     document.getElementById("timerDisplay").innerText = "00:00:00";
                     document.getElementById("timerDisplay").classList.add("blink"); // Start blinking in red
                 } else {
+                    // Calculate hours, minutes, and seconds
                     const hrs = Math.floor((remainingTime / 1000 / 60 / 60) % 24).toString().padStart(2, '0');
                     const mins = Math.floor((remainingTime / 1000 / 60) % 60).toString().padStart(2, '0');
                     const secs = Math.floor((remainingTime / 1000) % 60).toString().padStart(2, '0');
+                    // Display time in hh:mm:ss format
                     document.getElementById("timerDisplay").innerText = `${hrs}:${mins}:${secs}`;
                 }
             }, 1000);
