@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalistic Light Timer with Alert</title>
+    <title>Minimalistic Light Timer with Reset and Alert</title>
     <style>
         /* Main background and font styling */
         body {
@@ -11,7 +11,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffffff; /* Light background */
+            background-color: #FFFFFF; /* White background */
             color: #333333; /* Dark text for light theme */
             font-family: Arial, sans-serif;
             margin: 0;
@@ -40,6 +40,7 @@
         .buttons {
             display: flex;
             gap: 10px;
+            justify-content: center;
         }
 
         button {
@@ -56,6 +57,11 @@
         button:hover {
             background-color: #d0d0d0; /* Slightly darker on hover */
         }
+
+        .reset-button {
+            font-size: 24px; /* Bigger font for the reset symbol */
+            padding: 10px 15px;
+        }
     </style>
 </head>
 <body>
@@ -65,16 +71,20 @@
             <button onclick="startTimer(60 * 60)">1 Hour</button>
             <button onclick="startTimer(30 * 60)">30 Minutes</button>
             <button onclick="startTimer(15 * 60)">15 Minutes</button>
+            <!-- Reset Button (↻ symbol) -->
+            <button class="reset-button" onclick="resetTimer()">↻</button>
         </div>
     </div>
 
     <script>
         let timerInterval;
+        let timeLeft = 0; // Track the remaining time
 
         function startTimer(seconds) {
             clearInterval(timerInterval); // Clear any existing timer
             document.getElementById("timerDisplay").classList.remove("blink"); // Remove blinking if active
-            const endTime = Date.now() + seconds * 1000;
+            timeLeft = seconds; // Set the initial time to the selected value
+            const endTime = Date.now() + timeLeft * 1000;
 
             timerInterval = setInterval(() => {
                 const remainingTime = endTime - Date.now();
@@ -91,6 +101,14 @@
                     document.getElementById("timerDisplay").innerText = `${hrs}:${mins}:${secs}`;
                 }
             }, 1000);
+        }
+
+        // Reset function to stop the timer and reset to 00:00:00
+        function resetTimer() {
+            clearInterval(timerInterval); // Stop the timer
+            timeLeft = 0; // Reset the timeLeft to 0
+            document.getElementById("timerDisplay").innerText = "00:00:00"; // Reset the display
+            document.getElementById("timerDisplay").classList.remove("blink"); // Remove any blinking effect
         }
     </script>
 </body>
