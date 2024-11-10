@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalistic Timer</title>
+    <title>Minimalistic Light Timer with Alert</title>
     <style>
+        /* Main background and font styling */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #121212; /* Dark theme */
-            color: #ffffff;
+            background-color: #f7f7f7; /* Light background */
+            color: #333333; /* Dark text for light theme */
             font-family: Arial, sans-serif;
             margin: 0;
         }
@@ -23,6 +24,17 @@
         .time {
             font-size: 48px;
             margin: 20px 0;
+            color: #333333; /* Default dark text */
+            transition: color 0.3s ease; /* Smooth color transition */
+        }
+
+        .blink {
+            color: red; /* Red color when blinking */
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
         }
 
         .buttons {
@@ -31,23 +43,24 @@
         }
 
         button {
-            background-color: #333333;
-            color: #ffffff;
-            border: none;
+            background-color: #e0e0e0; /* Light button background */
+            color: #333333; /* Dark button text */
+            border: 1px solid #cccccc; /* Subtle border for button */
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
             transition: background 0.3s ease;
+            border-radius: 5px; /* Rounded edges for buttons */
         }
 
         button:hover {
-            background-color: #555555;
+            background-color: #d0d0d0; /* Slightly darker on hover */
         }
     </style>
 </head>
 <body>
     <div class="timer-container">
-        <div class="time" id="timerDisplay">00:00</div>
+        <div class="time" id="timerDisplay">00:00:00</div>
         <div class="buttons">
             <button onclick="startTimer(60 * 60)">1 Hour</button>
             <button onclick="startTimer(30 * 60)">30 Minutes</button>
@@ -60,17 +73,20 @@
 
         function startTimer(seconds) {
             clearInterval(timerInterval); // Clear any existing timer
+            document.getElementById("timerDisplay").classList.remove("blink"); // Remove blinking if active
             const endTime = Date.now() + seconds * 1000;
 
             timerInterval = setInterval(() => {
                 const remainingTime = endTime - Date.now();
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
-                    document.getElementById("timerDisplay").innerText = "00:00";
+                    document.getElementById("timerDisplay").innerText = "00:00:00";
+                    document.getElementById("timerDisplay").classList.add("blink"); // Start blinking in red
                 } else {
-                    const minutes = Math.floor((remainingTime / 1000 / 60) % 60).toString().padStart(2, '0');
-                    const hours = Math.floor((remainingTime / 1000 / 60 / 60)).toString().padStart(2, '0');
-                    document.getElementById("timerDisplay").innerText = `${hours}:${minutes}`;
+                    const hrs = Math.floor((remainingTime / 1000 / 60 / 60) % 24).toString().padStart(2, '0');
+                    const mins = Math.floor((remainingTime / 1000 / 60) % 60).toString().padStart(2, '0');
+                    const secs = Math.floor((remainingTime / 1000) % 60).toString().padStart(2, '0');
+                    document.getElementById("timerDisplay").innerText = `${hrs}:${mins}:${secs}`;
                 }
             }, 1000);
         }
